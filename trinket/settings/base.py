@@ -26,6 +26,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import dj_database_url
 
+from trinket.utils import htmlize
 from django.conf import global_settings
 
 ##########################################################################
@@ -110,11 +111,15 @@ INSTALLED_APPS = (
     'storages',
 
     # Trinket apps
-    'coffer',
+    'account',
+    'dataset',
+    'members',
+    'organization',
 )
 
 ## Request Handling
 MIDDLEWARE_CLASSES = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -122,7 +127,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
@@ -190,6 +194,7 @@ AWS_STORAGE_BUCKET_NAME = environ_setting("AWS_STORAGE_BUCKET_NAME", "trinket-co
 ADMINS          = (
     ('Benjamin Bengfort', 'bbengfort@districtdatalabs.com'),
     ('Tony Ojeda', 'tojeda@districtdatalabs.com'),
+    ('Rebecca Bilbro', 'rbilbro@districtdatalabs.com'),
 )
 
 SERVER_EMAIL    = 'DDL Admin <admin@districtdatalabs.com>'
@@ -207,8 +212,42 @@ EMAIL_SUBJECT_PREFIX = '[TRINKET] '
 GRAPPELLI_ADMIN_TITLE = "DDL Trinket CMS"
 
 ##########################################################################
+## Gravatar Configuration
+##########################################################################
+
+GRAVATAR_DEFAULT_SIZE   = 512
+GRAVATAR_DEFAULT_IMAGE  = 'identicon'
+GRAVATAR_DEFAULT_RATING = 'r'
+GRAVATAR_ICON_SIZE      = 30
+
+##########################################################################
+## MarkupField Configuration
+##########################################################################
+
+MARKUP_FIELD_TYPES = (
+    ('markdown', htmlize),
+)
+
+##########################################################################
 ## Social Authentication
 ##########################################################################
+
+## Password validation
+## https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 ## Support for Social Auth authentication backends
 AUTHENTICATION_BACKENDS = (
@@ -229,7 +268,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = [
     'districtdatalabs.com',
 ]
 
-LOGIN_REDIRECT_URL = "admin:index"
+LOGIN_REDIRECT_URL = "home"
 
 ## Error handling
 SOCIAL_AUTH_LOGIN_ERROR_URL = "login"

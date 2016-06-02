@@ -1,0 +1,180 @@
+{% extends 'page.html' %}
+{% load staticfiles %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link type="text/css" rel="stylesheet"  href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <div class="container">
+    <!-- Main Row in Container -->
+    <div class="row">
+
+      <!-- Image/Profile sidebar on left -->
+      <div id="profile-sidebar" class="col-sm-3">
+
+        <!-- Profile title box with picture -->
+        <div class="gravatar">
+          <img class="img-responsive img-rounded" src="{{ member.profile.gravatar }}"
+             alt="Gravatar" title="{{ member.full_name }}" />
+            <div class="mask">
+              <a href="http://en.gravatar.com/emails/" rel="nofollow" title="Change Gravatar">Edit on Gravatar</a>
+            </div>
+        </div>
+
+        <h2 id="profileFullName">{{ member.profile.full_name }}</h2>
+        <h3 class="text-muted" id="profileUsername">{{ member.username }}</h3>
+
+        <!-- Heads up profile info -->
+        <hr class="profile-sep" />
+        <ul class="list-unstyled">
+          {% if member.profile.location %}
+          <li id="userLocation" class="editable-item">
+            <i class="fa fa-map-marker"></i>
+            <span id="profileLocation">{{ member.profile.location }}</span>
+          </li>
+          {% endif %}
+          {% if member.profile.organization %}
+          <li id="userOrganization">
+            <i class="fa fa-building"></i>
+            <span id="profileOrganization">{{ member.profile.organization }}</span>
+          </li>
+          {% endif %}
+          <li id="userTwitter">
+              <i class="fa fa-twitter"></i>
+              {% if member.profile.twitter %}
+              <a id="profileTwitterA" href="https://twitter.com/{{ member.profile.twitter }}/" target="_blank">
+                <span id="profileTwitter">@{{ member.profile.twitter }}</span>
+              </a>
+              {% else %}
+              <span id="profileTwitter">Not Added</span>
+              {% endif %}
+          </li>
+          <li id="userLinkedIn">
+              <i class="fa fa-linkedin"></i>
+              {% if member.profile.linkedin %}
+              <a id="profileLinkedInA" href="{{ member.profile.linkedin }}/" target="_blank">
+                <span id="profileLinkedIn">{{ member.last_name }} Profile</span>
+              </a>
+              {% else %}
+              <span id="profileLinkedIn">Not Added</span>
+              {% endif %}
+          </li>
+          <li id="userJoined">
+              <i class="fa fa-clock-o"></i>
+              Joined on {{ member.date_joined|date }}
+          </li>
+        </ul>
+
+        <!-- Profile statistics -->
+        <hr class="profile-sep" />
+        <ul class="number-stats list-unstyled list-inline">
+          <li>
+            <a href="#">
+              <span class="statistic">0</span>
+              <span class="statlabel">tbd</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="statistic">0</span>
+              <span class="statlabel">tbd</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="statistic">0</span>
+              <span class="statlabel">tbd</span>
+            </a>
+          </li>
+        </ul>
+
+      </div><!-- image/profile sidebar ends -->
+
+      <!-- Main Profile Area -->
+      <div id="profile-content" class="col-sm-9">
+
+        <!-- Profile Tab Navigation -->
+        <div>
+
+          {% if user == member %}
+          <div id="user-edit-controls">
+            <!-- edit profile button -->
+            <button id="btnEditProfile" class="btn btn-default btn-sm pull-right"
+                data-toggle="modal" data-target="#editProfileModal">
+              <i class="fa fa-pencil"></i> Edit Profile
+            </button>
+
+            <!-- change password button -->
+            <button id="btnSetPassword" class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#setPasswordModal" style="margin-right:6px">
+              <i class="fa fa-lock"></i> Password
+            </button>
+          </div>
+          {% endif %}
+
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="#details" data-toggle="tab">
+                <i class="fa fa-flask"></i> Details
+              </a>
+            </li>
+            <li>
+              <a href="#activity" data-toggle="tab">
+                <i class="fa fa-rss"></i> Activity
+              </a>
+            </li>
+          </ul>
+
+          <div class="clearfix"></div>
+        </div>
+        <!-- end profile tabs -->
+
+        <div class="tab-content">
+
+          <div id="details" class="tab-pane active">
+
+            <!-- Biography if it exists -->
+            <div class="well">
+              {% if member.profile.biography.raw %}
+              {{ member.profile.biography }}
+              {% else %}
+              <p>No biography added quite yet.</p>
+              {% endif %}
+            </div>
+
+
+          </div>
+
+          <div id="activity" class="tab-pane">
+            <div class="well">
+              <!-- Activity Log -->
+              <ul class="list-unstyled activity-stream">
+                <li>No activities recorded yet</li>
+              </ul><!-- end activity log -->
+            </div>
+          </div><!-- activity panel ends -->
+        </div><!-- tab-content ends -->
+
+      </div><!-- main profile area ends -->
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block modals %}
+  {{ block.super }}
+  {% if user == member %}
+    {% include 'components/modals/edit-profile-modal.html' %}
+    {% include 'components/modals/set-password-modal.html' %}
+  {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+  {{ block.super }}
+
+  {% if user == member %}
+  <script src="{% static 'js/profile.js' %}" type="text/javascript"></script>
+  {% endif %}
+{% endblock %}
