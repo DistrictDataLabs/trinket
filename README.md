@@ -41,6 +41,39 @@ If you are a member of the District Data Labs Faculty group, you have direct acc
 
 4. Repeat. Releases will be routinely pushed into master via release branches, then deployed to the server.
 
+### Develop with Vagrant to develop against postgres
+
+Install Vagrant (here)[https://www.vagrantup.com/]
+
+Set up vagrant and install system
+
+`vagrant up`
+
+Log into vagrant and finalize set up. Caution it might take ten minutes to set up.
+
+`vagrant ssh`
+
+`cd project`
+
+Activate your virtualenv
+
+`source venv/bin/activate`
+
+Sync the database
+
+`python manage.py migrate`
+
+Create a super user to log in with
+
+`python manage.py createsuperuser`
+
+Run local development server
+
+`python manage.py runserver 0.0.0.0:8000 `
+
+Open your local browser to: http://localhost:8000/
+
+
 ### Throughput
 
 [![Throughput Graph](https://graphs.waffle.io/DistrictDataLabs/trinket/throughput.svg)](https://waffle.io/DistrictDataLabs/trinket/metrics)

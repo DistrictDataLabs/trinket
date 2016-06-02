@@ -10,6 +10,11 @@ sudo apt-get install -y python-dev git python-pip make build-essential libssl-de
 
 # setup db and allow django to access it
 cd project/
+
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
 sudo su
 sudo -u postgres createdb trinket
 sudo -u postgres psql trinket -a -f scripts/db_setup.sql
@@ -17,9 +22,6 @@ sudo cp scripts/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
 service postgresql restart
 
 #set up virtualenv
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
 
 python manage.py migrate
 
