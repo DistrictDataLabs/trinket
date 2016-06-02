@@ -43,6 +43,10 @@ If you are a member of the District Data Labs Faculty group, you have direct acc
 
 ### Develop with Vagrant to develop against postgres
 
+Rename sample.env to .env
+
+Add in any environment settings that you wish
+
 Install Vagrant (here)[https://www.vagrantup.com/]
 
 Set up vagrant and install system
